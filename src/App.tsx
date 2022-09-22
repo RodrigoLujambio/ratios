@@ -34,11 +34,15 @@ function App() {
             onChange={(e) => setNewYearName(e.target.value)}
           />
           <Button
+            disabled={newYearName.length === 0}
             onClick={() => {
               setModalIsOpen(false);
               tabLabels.push(newYearName);
               setTabLabels(tabLabels);
               setNewYearName("");
+            }}
+            style={{
+              marginTop: '0.5rem'
             }}
           >
             Agregar
@@ -50,6 +54,9 @@ function App() {
         <Button
           onClick={() => {
             setModalIsOpen(true);
+          }}
+          style={{
+            marginTop: '0.5rem'
           }}
         >
           Agregar Año
