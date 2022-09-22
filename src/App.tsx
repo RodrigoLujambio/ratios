@@ -1,25 +1,77 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import {
+  Tabs,
+  Title,
+  Container,
+  Button,
+  Modal,
+  TextInput,
+} from "@mantine/core";
+
+import Calculator from "./components/Calculator/Calculator";
 
 function App() {
+  const [tabLabels, setTabLabels] = useState(Array<string>);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [newYearName, setNewYearName] = useState("");
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <>
+      <Modal
+        opened={modalIsOpen}
+        onClose={() => {
+          setModalIsOpen(false);
+          setNewYearName("");
+        }}
+        title="Agregar Año"
+      >
+        <>
+          <TextInput
+            placeholder="Año"
+            label="Año"
+            withAsterisk
+            value={newYearName}
+            onChange={(e) => setNewYearName(e.target.value)}
+          />
+          <Button
+            onClick={() => {
+              setModalIsOpen(false);
+              tabLabels.push(newYearName);
+              setTabLabels(tabLabels);
+              setNewYearName("");
+            }}
+          >
+            Agregar
+          </Button>
+        </>
+      </Modal>
+      <Container size="xl" px="xs">
+        <Title order={1}>Calculadora de Ratios</Title>
+        <Button
+          onClick={() => {
+            setModalIsOpen(true);
+          }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          Agregar Año
+        </Button>
+        {tabLabels.length > 0 && (
+          <Tabs defaultValue={tabLabels[0]}>
+            <Tabs.List>
+              {tabLabels.map((label) => {
+                return <Tabs.Tab value={label}>{label}</Tabs.Tab>;
+              })}
+            </Tabs.List>
+            {tabLabels.map((label) => {
+              return (
+                <Tabs.Panel value={label}>
+                  <Calculator />
+                </Tabs.Panel>
+              );
+            })}
+          </Tabs>
+        )}
+      </Container>
+    </>
   );
 }
 
